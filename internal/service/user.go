@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/itachilee/gin/models"
 	"github.com/itachilee/gin/pkg/app"
 )
 
@@ -31,7 +30,7 @@ func (svc *Service) CountUser(param *UserListRequest) (int64, error) {
 	return svc.dao.CountUser(param.Name, param.Status)
 }
 
-func (svc *Service) GetUserList(param *UserListRequest, pager *app.Pager) ([]*models.User, error) {
+func (svc *Service) GetUserList(param *UserListRequest, pager *app.Pager) (interface{}, error) {
 	return svc.dao.GetUserList(param.Name, param.Status, pager.Page, pager.PageSize)
 }
 

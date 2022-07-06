@@ -22,9 +22,10 @@ func (d *Dao) CountUser(name string, status int) (int64, error) {
 	return user.Count(d.engine)
 }
 
-func (d *Dao) GetUserList(name string, status int, page, pageSize int) ([]*models.User, error) {
+func (d *Dao) GetUserList(name string, status int, page, pageSize int) (interface{}, error) {
 	tag := models.User{Name: name, Status: status}
 	pageOffset := app.GetPageOffset(page, pageSize)
+
 	return tag.List(d.engine, pageOffset, pageSize)
 }
 

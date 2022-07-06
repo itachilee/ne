@@ -54,19 +54,6 @@ func Setup() error {
 		return errors.New("未实现该类型的数据库链接")
 	}
 
-	// dsn := "root:3sqrcizt@tcp(mijiu.group:3307)/blog?charset=utf8mb4&parseTime=True&loc=Local"
-	// global.Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
-
-	// 	Logger: logger.Default.LogMode(logger.Info),
-	// 	// Logger: logger.Default.LogMode(logger.Silent),
-	// 	NamingStrategy: schema.NamingStrategy{
-	// 		TablePrefix:   "z_",  // table name prefix, table for `User` would be `t_users`
-	// 		SingularTable: false, // use singular table name, table for `User` would be `user` with this option enabled
-	// 		NoLowerCase:   true,  // skip the snake_casing of names
-	// 		// NameReplacer:  strings.NewReplacer("CID", "Cid"), // use name replacer to change struct/field name before convert it to db name
-	// 	},
-	// })
-
 	if err != nil {
 		log.Fatalf("models.Setup err: %v", err)
 	}

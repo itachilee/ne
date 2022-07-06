@@ -45,24 +45,18 @@ func (t User) Count(db *gorm.DB) (int64, error) {
 	return count, nil
 }
 
-func (t User) List(db *gorm.DB, pageOffset, pageSize int) ([]*User, error) {
-	var tags []*User
-	var err error
-	if pageOffset >= 0 && pageSize > 0 {
-		db = db.Offset(pageOffset).Limit(pageSize)
-	}
-	if t.Name != "" {
-		db = db.Where("name = ?", t.Name)
-	}
-	if t.Email != "" {
-		db = db.Where("email =?", t.Email)
-	}
-	db = db.Where("status = ?", t.Status)
-	if err = db.Find(&tags).Error; err != nil {
+func (t User) List(db *gorm.DB, pageOffset, pageSize int) (interface{}, error) {
+
+	umgr := ZUsersMgr(db)
+	// 构造分页条件
+	page := NewPage((int64(pageOffset)), int64(pageOffset))
+	// 不带条件的查询
+	result, err := umgr.SelectPage(page, umgr.WithStatus(1))
+	if err != nil {
 		return nil, err
 	}
-
-	return tags, nil
+	// result.GetPages()
+	return result.GetRecords(), nil
 }
 
 func (t User) Update(db *gorm.DB) error {
