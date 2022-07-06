@@ -25,7 +25,7 @@ func (svc *Service) CreateUser(param *CreateUserRequest) error {
 	return svc.dao.CreateUser(param.Name, param.Email, param.Password)
 }
 
-func (svc *Service) CountUser(param *UserListRequest) (int64, error) {
+func (svc *Service) CountUser(param *UserListRequest) *int64 {
 
 	return svc.dao.CountUser(param.Name, param.Status)
 }

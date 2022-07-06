@@ -32,17 +32,14 @@ func (v MyModel) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
-func (t User) Count(db *gorm.DB) (int64, error) {
-	var count int64
-	if t.Name != "" {
-		db = db.Where("name = ?", t.Name)
-	}
-	db = db.Where("status = ?", t.Status)
-	if err := db.Model(&t).Where("is_del = ?", 0).Count(&count).Error; err != nil {
-		return 0, err
-	}
+func (t User) Count(db *gorm.DB) *int64 {
+	umgr := ZUsersMgr(db)
+	var count *int64
+	umgr.WithName(t.Name)
+	umgr.WithStatus(int8(t.Status))
+	_ = umgr.Count(count)
 
-	return count, nil
+	return count
 }
 
 func (t User) List(db *gorm.DB, pageOffset, pageSize int) (interface{}, error) {
