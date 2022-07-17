@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	docs "github.com/itachilee/gin/docs" // 千万不要忘了导入把你上一步生成的docs
+	"github.com/itachilee/gin/internal/http"
 	"github.com/itachilee/gin/internal/middleware"
 	v1 "github.com/itachilee/gin/internal/routers/api/v1"
 	"github.com/itachilee/gin/pkg/limiter"
@@ -24,7 +25,7 @@ func NewRouter() *gin.Engine {
 	})
 	r := gin.New()
 	// r.Use(middleware.LoggerToFile())
-	r.Use(middleware.LoggerToMongo())
+	// r.Use(middleware.LoggerToMongo())
 	r.Use(gin.Recovery())
 	r.Use(middleware.Translations())
 	r.Use(middleware.ContextTimeout(30 * time.Second))
@@ -43,5 +44,13 @@ func NewRouter() *gin.Engine {
 		apiv1.PATCH("/users/:id/status", user.Update)
 		apiv1.GET("/users", user.List)
 	}
+
+	r.GET("/", http.PlaygroundHandler())
+	r.POST("/query", http.GraphQLHandler())
+	// srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+
+	// r.GET("/query", func(c *gin.Context){
+	// 	srv
+	// })
 	return r
 }
