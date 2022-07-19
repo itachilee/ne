@@ -95,5 +95,10 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
+
+	err = setting.ReadSection("TencentOss", &global.TencentOssSetting)
+	if err != nil {
+		return err
+	}
 	return nil
 }
