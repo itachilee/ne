@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"time"
 
@@ -11,14 +12,14 @@ import (
 	"github.com/itachilee/gin/pkg/setting"
 )
 
-// func init() {
+func init() {
 
-// 	err := setupSetting()
-// 	if err != nil {
-// 		log.Fatalf("init.setupSetting err: %v", err)
-// 		panic(err)
-// 	}
-// }
+	err := setupSetting()
+	if err != nil {
+		log.Fatalf("init.setupSetting err: %v", err)
+		panic(err)
+	}
+}
 
 // @title title ne on go
 // @version 1.0
