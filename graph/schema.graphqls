@@ -1,3 +1,9 @@
+
+
+# file upload
+scalar Upload
+
+
 # 定义数据类型 Todo
 type Todo {
   id: ID!
@@ -16,6 +22,7 @@ type User {
 type Query {
   todos: [Todo!]!          # todos 接口，返回 Todo 列表
   todo(id: String!): Todo   # todo 接口，通过 id 查询返回 Todo
+   empty: String!
 }
 
 
@@ -25,7 +32,26 @@ input NewTodo {
   userId: String!
 }
 
+"The `File` type, represents the response of uploading a file."
+type File {
+    id: Int!
+    name: String!
+    content: String!
+    contentType: String!
+}
+
+"The `UploadFile` type, represents the request for uploading a file with certain payload."
+input UploadFile {
+    id: Int!
+    file: Upload!
+}
 # 定义修改操作，支持一个接口
 type Mutation {
   createTodo(input: NewTodo!): Todo!   # createTodo 接口，通过 NewTodo 创建并返回 Todo
+  singleUpload(file: Upload!): File!
+  singleUploadWithPayload(req: UploadFile!): File!
+  multipleUpload(files: [Upload!]!): [File!]!
+  multipleUploadWithPayload(req: [UploadFile!]!): [File!]!
 }
+
+

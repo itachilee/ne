@@ -6,8 +6,9 @@ package graph
 import (
 	"context"
 	"fmt"
+	"io"
 
-	"github.com/itachilee/gin/global"
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/itachilee/gin/graph/generated"
 	"github.com/itachilee/gin/graph/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -17,7 +18,7 @@ import (
 
 // CreateTodo is the resolver for the createTodo field.
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	collection := global.MgoCli.Database("blog").Collection("todo")
+	collection := r.MgoCli.Database("blog").Collection("todo")
 
 	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	// defer cancel()
@@ -37,11 +38,45 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 	return todo, nil
 }
 
+// SingleUpload is the resolver for the singleUpload field.
+func (r *mutationResolver) SingleUpload(ctx context.Context, file graphql.Upload) (*model.File, error) {
+	// panic(fmt.Errorf("not implemented"))
+	content, err := io.ReadAll(file.File)
+	if err != nil {
+		return nil, err
+	}
+	_, err = r.CosCli.Object.Put(context.Background(), file.Filename, file.File, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	return &model.File{
+		ID:      1,
+		Name:    file.Filename,
+		Content: string(content),
+	}, nil
+}
+
+// SingleUploadWithPayload is the resolver for the singleUploadWithPayload field.
+func (r *mutationResolver) SingleUploadWithPayload(ctx context.Context, req model.UploadFile) (*model.File, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+// MultipleUpload is the resolver for the multipleUpload field.
+func (r *mutationResolver) MultipleUpload(ctx context.Context, files []*graphql.Upload) ([]*model.File, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+// MultipleUploadWithPayload is the resolver for the multipleUploadWithPayload field.
+func (r *mutationResolver) MultipleUploadWithPayload(ctx context.Context, req []*model.UploadFile) ([]*model.File, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 // Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	findOption := options.Find()
 	findOption.SetLimit(5)
-	collection := global.MgoCli.Database("blog").Collection("todo")
+	collection := r.MgoCli.Database("blog").Collection("todo")
 	cur, err := collection.Find(context.TODO(), bson.D{{}}, findOption)
 	if err != nil {
 		fmt.Print(err)
@@ -66,9 +101,8 @@ func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 
 // Todo is the resolver for the todo field.
 func (r *queryResolver) Todo(ctx context.Context, id string) (*model.Todo, error) {
-
 	findOption := bson.M{"_id": id}
-	collection := global.MgoCli.Database("blog").Collection("todo")
+	collection := r.MgoCli.Database("blog").Collection("todo")
 
 	todo := model.Todo{}
 	err := collection.FindOne(context.TODO(), findOption).Decode(&todo)
@@ -77,6 +111,11 @@ func (r *queryResolver) Todo(ctx context.Context, id string) (*model.Todo, error
 		fmt.Println(err)
 	}
 	return &todo, err
+}
+
+// Empty is the resolver for the empty field.
+func (r *queryResolver) Empty(ctx context.Context) (string, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 // Mutation returns generated.MutationResolver implementation.

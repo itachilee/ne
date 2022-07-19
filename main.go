@@ -9,6 +9,7 @@ import (
 	"github.com/itachilee/gin/internal/routers"
 	"github.com/itachilee/gin/models"
 	"github.com/itachilee/gin/pkg/cache"
+	"github.com/itachilee/gin/pkg/oss"
 	"github.com/itachilee/gin/pkg/setting"
 )
 
@@ -100,5 +101,6 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
+	oss.SetupCos()
 	return nil
 }

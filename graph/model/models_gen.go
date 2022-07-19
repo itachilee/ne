@@ -2,6 +2,18 @@
 
 package model
 
+import (
+	"github.com/99designs/gqlgen/graphql"
+)
+
+// The `File` type, represents the response of uploading a file.
+type File struct {
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Content     string `json:"content"`
+	ContentType string `json:"contentType"`
+}
+
 type NewTodo struct {
 	Text   string `json:"text"`
 	UserID string `json:"userId"`
@@ -12,6 +24,12 @@ type Todo struct {
 	Text string `json:"text"`
 	Done bool   `json:"done"`
 	User *User  `json:"user"`
+}
+
+// The `UploadFile` type, represents the request for uploading a file with certain payload.
+type UploadFile struct {
+	ID   int            `json:"id"`
+	File graphql.Upload `json:"file"`
 }
 
 type User struct {

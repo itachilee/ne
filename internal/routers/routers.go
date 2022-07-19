@@ -10,6 +10,7 @@ import (
 
 	ginMiddlewares "github.com/Laisky/gin-middlewares"
 	docs "github.com/itachilee/gin/docs" // 千万不要忘了导入把你上一步生成的docs
+	"github.com/itachilee/gin/global"
 	"github.com/itachilee/gin/graph"
 	"github.com/itachilee/gin/graph/generated"
 	"github.com/itachilee/gin/internal/middleware"
@@ -53,7 +54,10 @@ func NewRouter() *gin.Engine {
 	// r.GET("/", http.PlaygroundHandler())
 	// r.POST("/query", http.GraphQLHandler())
 	// srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
-	h := handler.New(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	h := handler.New(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
+		MgoCli: global.MgoCli,
+		CosCli: global.CosCli,
+	}}))
 	h.AddTransport(transport.Websocket{
 		KeepAlivePingInterval: 10 * time.Second,
 	})
