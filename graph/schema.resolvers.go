@@ -4,6 +4,7 @@ package graph
 // will be copied through when generating and any unknown code will be moved to the end.
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -38,6 +39,11 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) 
 	return todo, nil
 }
 
+type T struct {
+	ReaderSeeker io.ReadSeeker
+	L            int64
+}
+
 // SingleUpload is the resolver for the singleUpload field.
 func (r *mutationResolver) SingleUpload(ctx context.Context, file graphql.Upload) (*model.File, error) {
 	// panic(fmt.Errorf("not implemented"))
@@ -45,11 +51,12 @@ func (r *mutationResolver) SingleUpload(ctx context.Context, file graphql.Upload
 	if err != nil {
 		return nil, err
 	}
-	_, err = r.CosCli.Object.Put(context.Background(), file.Filename, file.File, nil)
+	b := bytes.NewBuffer(content)
+	_, err = r.CosCli.Object.Put(ctx, file.Filename, b, nil)
 	if err != nil {
 		panic(err)
 	}
-
+	// dump.V(resp)
 	return &model.File{
 		ID:      1,
 		Name:    file.Filename,

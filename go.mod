@@ -16,7 +16,7 @@ require (
 	github.com/juju/ratelimit v1.0.1
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/sirupsen/logrus v1.8.1
-	github.com/stretchr/testify v1.7.2 // indirect
+	github.com/stretchr/testify v1.8.0 // indirect
 	github.com/swaggo/swag v1.8.3
 	github.com/xuri/excelize/v2 v2.6.0
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
@@ -52,6 +52,11 @@ require (
 )
 
 require (
+	github.com/gookit/color v1.5.1 // indirect
+	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
+)
+
+require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/Laisky/fast-skiplist v0.0.0-20210907063351-e00546c800a6 // indirect
 	github.com/Laisky/go-chaining v0.0.0-20180507092046-43dcdc5a21be // indirect
@@ -76,6 +81,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
+	github.com/gookit/goutil v0.5.7
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
