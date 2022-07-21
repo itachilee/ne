@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
 
+	"github.com/casbin/casbin/v2"
 	"github.com/itachilee/gin/global"
 	"github.com/itachilee/gin/internal/routers"
 	"github.com/itachilee/gin/models"
@@ -51,6 +53,16 @@ func main() {
 	// })
 	s.ListenAndServe()
 }
+
+func check(e *casbin.Enforcer, sub, obj, act string) {
+	ok, _ := e.Enforce(sub, obj, act)
+	if ok {
+		fmt.Printf("%s CAN %s %s\n", sub, act, obj)
+	} else {
+		fmt.Printf("%s CANNOT %s %s\n", sub, act, obj)
+	}
+}
+
 func setupSetting() error {
 	setting, err := setting.NewSetting()
 	if err != nil {

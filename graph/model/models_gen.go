@@ -6,24 +6,18 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
+type CreateUser struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 // The `File` type, represents the response of uploading a file.
 type File struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
 	Content     string `json:"content"`
 	ContentType string `json:"contentType"`
-}
-
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
-}
-
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
 }
 
 // The `UploadFile` type, represents the request for uploading a file with certain payload.
@@ -33,6 +27,9 @@ type UploadFile struct {
 }
 
 type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID            int     `json:"id"`
+	Name          *string `json:"name"`
+	Email         *string `json:"email"`
+	Password      *string `json:"password"`
+	RememberToken *string `json:"remember_token"`
 }

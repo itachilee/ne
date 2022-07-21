@@ -481,6 +481,7 @@ type ZUsers struct {
 	RememberToken   string    `gorm:"column:remember_token" json:"rememberToken"`
 	CreatedAt       time.Time `gorm:"column:created_at" json:"createdAt"`
 	UpdatedAt       time.Time `gorm:"column:updated_at" json:"updatedAt"`
+	Role            string    `json:"role" gorm:"-"`
 }
 
 // TableName get sql table name.获取数据库表名

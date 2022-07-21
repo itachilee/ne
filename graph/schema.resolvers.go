@@ -6,42 +6,36 @@ package graph
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/itachilee/gin/graph/generated"
 	"github.com/itachilee/gin/graph/model"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/itachilee/gin/models"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	collection := r.MgoCli.Database("blog").Collection("todo")
-
-	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	// defer cancel()
-	res, err := collection.InsertOne(ctx, bson.D{
-		{Key: "userId", Value: input.UserID},
-		{Key: "text", Value: input.Text}})
+// CreateUser is the resolver for the createUser field.
+func (r *mutationResolver) CreateUser(ctx context.Context, input *model.CreateUser) (*model.User, error) {
+	user := models.ZUsers{
+		Name:            input.Name,
+		Email:           input.Email,
+		Password:        input.Password,
+		Status:          1,
+		EmailVerifiedAt: 0_0,
+	}
+	err := r.Db.Create(&user).Error
 	if err != nil {
-		fmt.Print(err)
+		return nil, err
 	}
-	id := res.InsertedID.(primitive.ObjectID)
-
-	todo := &model.Todo{
-		ID:   id.String(), // fmt.Sprint((rand.Int())),
-		Text: input.Text,
+	res := &model.User{
+		ID:       int(user.ID),
+		Email:    &user.Email,
+		Password: &user.Password,
 	}
-
-	return todo, nil
-}
-
-type T struct {
-	ReaderSeeker io.ReadSeeker
-	L            int64
+	// return user.Create(r.Db)
+	return res, nil
 }
 
 // SingleUpload is the resolver for the singleUpload field.
@@ -79,45 +73,27 @@ func (r *mutationResolver) MultipleUploadWithPayload(ctx context.Context, req []
 	panic(fmt.Errorf("not implemented"))
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	findOption := options.Find()
-	findOption.SetLimit(5)
-	collection := r.MgoCli.Database("blog").Collection("todo")
-	cur, err := collection.Find(context.TODO(), bson.D{{}}, findOption)
-	if err != nil {
-		fmt.Print(err)
-	}
-	var todos []*model.Todo
-	for cur.Next(context.TODO()) {
-		var todo model.Todo
-		err = cur.Decode(&todo)
+// Users is the resolver for the users field.
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 
-		if err != nil {
-			fmt.Print(err)
-		}
-		todos = append(todos, &todo)
-	}
-	if err := cur.Err(); err != nil {
-		fmt.Print(err)
-	}
-	cur.Close(context.TODO())
-	return todos, nil
-	// panic(fmt.Errorf("not implemented"))
-}
+	return nil, errors.New("kfc crazy thursday need $50")
+	// mgr := models.ZUsersMgr(r.Db)
+	// users, err := mgr.Gets()
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// res := make([]*model.User, 0)
+	// for _, u := range users {
+	// 	t := &model.User{
+	// 		ID:       int(u.ID),
+	// 		Email:    &u.Email,
+	// 		Name:     &u.Name,
+	// 		Password: &u.Password,
+	// 	}
+	// 	res = append(res, t)
+	// }
+	// return res, nil
 
-// Todo is the resolver for the todo field.
-func (r *queryResolver) Todo(ctx context.Context, id string) (*model.Todo, error) {
-	findOption := bson.M{"_id": id}
-	collection := r.MgoCli.Database("blog").Collection("todo")
-
-	todo := model.Todo{}
-	err := collection.FindOne(context.TODO(), findOption).Decode(&todo)
-	if err != nil {
-		fmt.Println(id)
-		fmt.Println(err)
-	}
-	return &todo, err
 }
 
 // Empty is the resolver for the empty field.

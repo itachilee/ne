@@ -4,32 +4,26 @@
 scalar Upload
 
 
-# 定义数据类型 Todo
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
-}
 
 # 定义数据类型 User
 type User {
-  id: ID!
+  id: Int!
+  name: String
+  email: String
+  password: String
+  remember_token: String
+}
+
+input CreateUser{
   name: String!
+  email: String!
+  password: String!
 }
 
 # 定义查询操作，支持两个接口
 type Query {
-  todos: [Todo!]!          # todos 接口，返回 Todo 列表
-  todo(id: String!): Todo   # todo 接口，通过 id 查询返回 Todo
+  users:[User!]!
    empty: String!
-}
-
-
-# 定义输入参数
-input NewTodo {
-  text: String!
-  userId: String!
 }
 
 "The `File` type, represents the response of uploading a file."
@@ -47,7 +41,7 @@ input UploadFile {
 }
 # 定义修改操作，支持一个接口
 type Mutation {
-  createTodo(input: NewTodo!): Todo!   # createTodo 接口，通过 NewTodo 创建并返回 Todo
+  createUser(input: CreateUser): User!
   singleUpload(file: Upload!): File!
   singleUploadWithPayload(req: UploadFile!): File!
   multipleUpload(files: [Upload!]!): [File!]!
