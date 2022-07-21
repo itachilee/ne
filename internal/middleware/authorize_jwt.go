@@ -17,7 +17,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 		if authHeader == "" {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"error": "No Authorization header found"})
-
+			return
 		}
 		tokenString := authHeader[len(BearerSchema):]
 

@@ -37,8 +37,8 @@ func NewRouter() *gin.Engine {
 		log.Fatalf("NewEnforecer failed:%v\n", err)
 	}
 	//add policy
-	if hasPolicy := e.HasPolicy("doctor", "report", "read"); !hasPolicy {
-		e.AddPolicy("doctor", "report", "read")
+	if hasPolicy := e.HasPolicy("14", "report", "read"); !hasPolicy {
+		e.AddPolicy("14", "report", "read")
 	}
 	if hasPolicy := e.HasPolicy("doctor", "report", "write"); !hasPolicy {
 		e.AddPolicy("doctor", "report", "write")

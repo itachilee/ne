@@ -98,10 +98,10 @@ func (h userController) AddUser(enforcer *casbin.Enforcer) gin.HandlerFunc {
 			return
 
 		}
-		if err := ctx.ShouldBindJSON(&user); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+		// if err := ctx.ShouldBindJSON(&user); err != nil {
+		// 	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		// 	return
+		// }
 		utils.HashPassword(&user.Password)
 		user, err := h.userRepo.AddUser(user)
 		if err != nil {
